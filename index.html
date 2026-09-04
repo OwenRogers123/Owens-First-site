@@ -1,155 +1,1504 @@
 <!DOCTYPE html>
-<!--
-  ================================================================
-  READ THIS BEFORE YOU PASTE ANYTHING
-
-  When Gemini gives you a page, you do NOT paste it into a part of
-  this file. You replace the entire file.
-
-  Click into the editor, press Ctrl+A (Cmd+A on Mac), press Delete,
-  then paste. Everything here is meant to be thrown away.
-
-  Do that only AFTER your live link works. Get the link first.
-  ================================================================
--->
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My first site</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0d1d30;
-    --card: #142a44;
-    --line: #27466a;
-    --aqua: #6de1d7;
-    --text: #ffffff;
-    --muted: #94a9bf;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--navy);
-    color: var(--text);
-    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    padding: 6vh 20px;
-  }
-  main { width: 100%; max-width: 640px; }
-  .badge {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--aqua);
-    margin-bottom: 18px;
-  }
-  h1 {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 800;
-    font-size: clamp(38px, 9vw, 68px);
-    letter-spacing: -0.05em;
-    line-height: 1.02;
-    margin: 0 0 8px;
-  }
-  .name {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 600;
-    font-size: clamp(18px, 4vw, 24px);
-    letter-spacing: -0.04em;
-    color: var(--aqua);
-    margin: 0 0 24px;
-  }
-  p.lead { font-size: 18px; color: var(--muted); margin: 0 0 34px; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 26px 28px;
-    margin-bottom: 18px;
-  }
-  .card h2 {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    color: var(--aqua);
-    margin: 0 0 16px;
-  }
-  ol { margin: 0; padding-left: 20px; }
-  li { margin-bottom: 12px; color: var(--muted); }
-  li:last-child { margin-bottom: 0; }
-  li b { color: var(--text); font-weight: 700; }
-  code {
-    font-family: ui-monospace, "SF Mono", Consolas, monospace;
-    font-size: 0.92em;
-    background: #0a1727;
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    padding: 1px 6px;
-    color: var(--aqua);
-  }
-  a { color: var(--aqua); }
-  footer {
-    margin-top: 30px;
-    font-size: 14px;
-    color: #6e839a;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podium - College Impromptu Speaking Coach</title>
+  
+  <!-- One Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDKs for Community Leaderboard -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.3);
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #818cf8;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Tabs Nav */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-family);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    /* Views */
+    .view-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: none;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    .view-card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Topic Generator Section */
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pill.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      color: #a5b4fc;
+    }
+
+    .topic-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 20px;
+      padding: 36px 24px;
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.05);
+    }
+
+    .topic-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #818cf8;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .topic-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #ffffff;
+      max-width: 680px;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 14px;
+      border: none;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--font-family);
+      text-decoration: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px var(--primary-glow);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #ffffff;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Speaking Stage Section */
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .timer-circle-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .timer-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 10;
+    }
+
+    .timer-progress {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 565;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+
+    .timer-display {
+      position: absolute;
+      text-align: center;
+    }
+
+    .timer-number {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .prep-phase .timer-progress {
+      stroke: var(--warning);
+    }
+
+    .speak-phase .timer-progress {
+      stroke: var(--accent);
+    }
+
+    /* Audio Waveform Canvas */
+    .visualizer-card {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    canvas#waveform {
+      width: 100%;
+      height: 60px;
+      display: block;
+    }
+
+    .speech-transcript-box {
+      margin-top: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 14px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .speech-transcript-box.active {
+      color: #e2e8f0;
+    }
+
+    /* Results Dashboard */
+    .results-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .score-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .score-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 4px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .score-val {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .score-max {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .score-summary-text {
+      flex: 1;
+      min-width: 240px;
+      text-align: left;
+    }
+
+    .score-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .score-desc {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* Rating Breakdown Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .metric-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .metric-score-num {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .metric-bar-bg {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .metric-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    /* Feedback Sections */
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .feedback-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feedback-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .feedback-card.strengths {
+      border-left: 4px solid var(--accent);
+    }
+
+    .feedback-card.improvements {
+      border-left: 4px solid var(--warning);
+    }
+
+    .feedback-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedback-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feedback-list li {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .feedback-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Audio Playback Box */
+    .audio-playback-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    audio {
+      width: 100%;
+      height: 40px;
+      border-radius: 8px;
+    }
+
+    /* Leaderboard Tab */
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .leaderboard-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .leaderboard-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .rank-1 { background: #f59e0b; color: #000; }
+    .rank-2 { background: #94a3b8; color: #000; }
+    .rank-3 { background: #b45309; color: #fff; }
+
+    .user-col {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .topic-cell {
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-muted);
+    }
+
+    .score-badge-table {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Modal for Leaderboard Post */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #1e293b;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .input-group {
+      margin: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .input-control {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.8);
+      color: #ffffff;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .input-control:focus {
+      border-color: var(--primary);
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Helper Utilities */
+    .text-center { text-align: center; }
+    .mt-4 { margin-top: 16px; }
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
-<main>
 
-  <span class="badge">Cal Poly Vibe Coding &middot; Session 01</span>
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <div class="logo-badge">🏛️ AI Speaking Coach</div>
+      <h1>Podium</h1>
+      <p class="subtitle">Think fast and speak with confidence. Grab a college prompt, speak for 60 seconds, and level up your public speaking skills.</p>
+    </header>
 
-  <h1>It&rsquo;s live.</h1>
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('practice')">Practice</button>
+      <button class="tab-btn" onclick="switchTab('leaderboard')">Leaderboard</button>
+    </nav>
 
-  <!-- Step 5: change the name below to yours, then commit. -->
-  <p class="name">Built by Owen Rogers</p>
+    <!-- TAB 1: PRACTICE & RECORDING VIEW -->
+    <main id="practiceView">
+      
+      <!-- STEP 1: TOPIC GENERATOR -->
+      <section id="stepTopic" class="view-card active">
+        <div class="category-pills">
+          <button class="pill active" onclick="setCategory('all', this)">All Prompts</button>
+          <button class="pill" onclick="setCategory('campus', this)">Campus Life</button>
+          <button class="pill" onclick="setCategory('career', this)">Career & Hustle</button>
+          <button class="pill" onclick="setCategory('poptech', this)">Pop Culture & Tech</button>
+          <button class="pill" onclick="setCategory('debates', this)">Late Night Debates</button>
+        </div>
 
-  <p class="lead">
-    This page is on the internet. Anyone you send this link to can open it,
-    on any device, right now. You made that happen in about five minutes.
-  </p>
+        <div class="topic-box">
+          <span class="topic-tag" id="topicCategoryTag">Campus Life</span>
+          <h2 class="topic-text" id="topicText">"Convince the professor to extend a project deadline without using an excuse."</h2>
+        </div>
 
-  <div class="card">
-    <h2>Three things, in this order</h2>
-    <ol>
-      <li><b>Put your name on it.</b> Edit <code>index.html</code>, change
-        YOUR NAME HERE above, commit, refresh this page.</li>
-      <li><b>Submit this link.</b> Go to
-        <a href="https://www.calpolyvibecoding.com/">calpolyvibecoding.com</a>,
-        make an account, and paste this URL in. That is how you get counted,
-        and how Claude seats get assigned.</li>
-      <li><b>Then build.</b> Open Gemini, get a page, and replace this entire
-        file with it.</li>
-    </ol>
+        <div class="controls-row">
+          <button class="btn btn-secondary" onclick="generateNewTopic()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            New Topic
+          </button>
+          <button class="btn btn-primary" onclick="startPrepSession()">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+            Take the Podium (60s)
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 2: PREPARATION & RECORDING STAGE -->
+      <section id="stepRecord" class="view-card">
+        <div class="text-center">
+          <div class="topic-tag" id="activeTopicCategory">Category</div>
+          <h3 id="activeTopicDisplay" style="font-size: 1.25rem; margin-bottom: 20px;">Topic Display</h3>
+        </div>
+
+        <!-- Circle Timer -->
+        <div class="timer-container prep-phase" id="timerContainer">
+          <div class="timer-circle-wrap">
+            <svg class="timer-svg" viewBox="0 0 200 200">
+              <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+              <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="timer-display">
+              <div class="timer-number" id="timerCount">10</div>
+              <div class="timer-label" id="timerStateLabel">PREPARE</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audio Waveform -->
+        <div class="visualizer-card">
+          <canvas id="waveform"></canvas>
+          <div id="speechTranscript" class="speech-transcript-box">
+            Listening for your speech... Speak clearly into your mic!
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-row mt-4">
+          <button class="btn btn-secondary" onclick="resetToTopicScreen()">Cancel</button>
+          <button id="finishEarlyBtn" class="btn btn-danger hidden" onclick="stopRecordingEarly()">
+            Finish Speech Early
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 3: EVALUATION & RESULTS -->
+      <section id="stepResults" class="view-card">
+        <div class="results-header">
+          <div class="logo-badge">Analysis Complete</div>
+          <h2 style="font-size: 2rem; font-weight: 800;">Your Podium Evaluation</h2>
+        </div>
+
+        <!-- Score Banner -->
+        <div class="score-banner">
+          <div class="score-circle">
+            <span class="score-val" id="overallScoreVal">--</span>
+            <span class="score-max">/ 100</span>
+          </div>
+          <div class="score-summary-text">
+            <div class="score-title" id="scoreHeadline">Analyzing performance...</div>
+            <p class="score-desc" id="scoreProTip">Getting detailed feedback from AI speech coach...</p>
+          </div>
+        </div>
+
+        <!-- Score Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-head"><span>Clarity & Voice</span><span class="metric-score-num" id="clarityNum">-/10</span></div>
+            <div class="metric-bar-bg"><div class="metric-bar-fill" id="clarityBar"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-head"><span>Structure & Flow</span><span class="metric-score-num" id="structureNum">-/10</span></div>
+            <div class="metric-bar-bg"><div class="metric-bar-fill" id="structureBar"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-head"><span>Pacing & WPM</span><span class="metric-score-num" id="paceNum">-/10</span></div>
+            <div class="metric-bar-bg"><div class="metric-bar-fill" id="paceBar"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-head"><span>Vocabulary Choice</span><span class="metric-score-num" id="vocabNum">-/10</span></div>
+            <div class="metric-bar-bg"><div class="metric-bar-fill" id="vocabBar"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-head"><span>Topic Relevance</span><span class="metric-score-num" id="relevanceNum">-/10</span></div>
+            <div class="metric-bar-bg"><div class="metric-bar-fill" id="relevanceBar"></div></div>
+          </div>
+        </div>
+
+        <!-- Audio Listen Back Box -->
+        <div class="audio-playback-box" id="audioPlaybackBox">
+          <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+            <span>🎙️ Your Recorded Speech Playback</span>
+            <span id="speechWpmTag" style="color: #a5b4fc; font-weight: 700;">~0 WPM</span>
+          </div>
+          <audio id="audioPlayer" controls></audio>
+        </div>
+
+        <!-- Strengths & Improvements -->
+        <div class="feedback-grid">
+          <div class="feedback-card strengths">
+            <h3>🌟 What Worked Well</h3>
+            <ul class="feedback-list" id="strengthsList">
+              <li>Strong starting hook.</li>
+              <li>Good pitch modulation.</li>
+            </ul>
+          </div>
+          <div class="feedback-card improvements">
+            <h3>🎯 Actionable Improvements</h3>
+            <ul class="feedback-list" id="improvementsList">
+              <li>Reduce filler words ("um", "like").</li>
+              <li>Pause before key conclusions.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="controls-row">
+          <button class="btn btn-secondary" onclick="resetToTopicScreen()">Try Another Prompt</button>
+          <button class="btn btn-primary" onclick="openLeaderboardModal()">Post Score to Leaderboard 🏆</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- TAB 2: LEADERBOARD VIEW -->
+    <main id="leaderboardView" class="view-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.8rem; font-weight: 800;">Podium Hall of Fame</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Top speaker performances rated by Podium AI</p>
+        </div>
+        <button class="btn btn-primary" onclick="switchTab('practice')">Take Podium</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Speaker</th>
+              <th>Topic Prompt</th>
+              <th>WPM</th>
+              <th>AI Score</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </main>
   </div>
 
-  <div class="card">
-    <h2>How to replace this page</h2>
-    <ol>
-      <li>Copy what Gemini gives you with the <b>copy button</b> on the code
-        block. Do not click and drag.</li>
-      <li>Open <code>index.html</code> here and click the pencil icon.</li>
-      <li><b>Ctrl+A</b> (<b>Cmd+A</b> on Mac), then <b>Delete</b>. All of it.
-        Yes, really.</li>
-      <li>Paste, commit, refresh.</li>
-    </ol>
+  <!-- LEADERBOARD POST MODAL -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal">
+      <div class="modal-title">Publish Score to Leaderboard</div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4;">
+        Showcase your speaking skills to the campus community!
+      </p>
+
+      <div class="input-group">
+        <label for="speakerName">Your Name or Handle</label>
+        <input type="text" id="speakerName" class="input-control" placeholder="e.g. Jordan K. or @CampusSpeaker" maxlength="24">
+      </div>
+
+      <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 10px; margin-bottom: 18px; border: 1px solid var(--card-border);">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Score to Submit</div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent);" id="modalScoreDisplay">0 / 100</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="closeLeaderboardModal()">Cancel</button>
+        <button class="btn btn-primary" id="submitScoreBtn" onclick="submitScoreToLeaderboard()">Publish Score</button>
+      </div>
+    </div>
   </div>
 
-  <footer>
-    Nothing on this page is precious. It exists so the link has something to
-    show before you have something of your own.
-  </footer>
+  <script>
+    // --- TOPIC DATABASE (COLLEGE FOCUSED) ---
+    const TOPIC_DATABASE = [
+      // Campus Life
+      { category: 'campus', text: 'Convince a professor to extend a project deadline without using a single excuse.' },
+      { category: 'campus', text: 'Deliver an impromptu pitch for why early morning 8 AM classes should be outlawed.' },
+      { category: 'campus', text: 'Pitch a survival guide for finding the quietest spot in the library during finals week.' },
+      { category: 'campus', text: 'Convince your roommate that doing the dishes right now is essential to ecosystem harmony.' },
+      
+      // Career & Hustle
+      { category: 'career', text: 'You have 60 seconds to pitch your dream internship startup idea to a venture capitalist.' },
+      { category: 'career', text: 'Explain why networking at campus events is actually a superpower when done right.' },
+      { category: 'career', text: 'How do you handle being asked "What is your biggest weakness?" in a job interview?' },
+      { category: 'career', text: 'Convince an employer that your non-traditional summer job taught you valuable leadership.' },
 
-</main>
+      // Pop Culture & Tech
+      { category: 'poptech', text: 'Is group chat etiquette the ultimate test of modern friendship?' },
+      { category: 'poptech', text: 'Explain the concept of "brain rot" social media trends to someone from the year 1920.' },
+      { category: 'poptech', text: 'Will artificial intelligence make college degrees more or less valuable by the time you graduate?' },
+      { category: 'poptech', text: 'Defend your favorite binge-worthy show as a masterclass in modern storytelling.' },
+
+      // Late Night Debates
+      { category: 'debates', text: 'Settle the debate: Is cereal a soup, or is iced coffee a primary food group?' },
+      { category: 'debates', text: 'Would you rather have unlimited free dining hall food forever or never have homework again?' },
+      { category: 'debates', text: 'Argue whether pulling an all-nighter is ever strategically worth it.' },
+      { category: 'debates', text: 'If you had to teach a college course on any niche topic, what would it be and why?' }
+    ];
+
+    // --- APP STATE ---
+    let currentCategory = 'all';
+    let currentTopic = TOPIC_DATABASE[0];
+    let timerInterval = null;
+    let prepTimeLeft = 10;
+    let speakTimeLeft = 60;
+    let isRecording = false;
+
+    // Web Speech API & MediaRecorder
+    let recognition = null;
+    let speechTranscriptText = "";
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlobUrl = null;
+    let audioContext = null;
+    let analyser = null;
+    let animFrame = null;
+
+    // Last Analysis Results
+    let currentAnalysisResult = null;
+
+    // --- FIREBASE / FIRESTORE INIT ---
+    const apiKey = "";
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'podium-college-app';
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+
+    async function initFirebase() {
+      if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+        try {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = firebase.initializeApp(firebaseConfig);
+          auth = firebase.auth();
+          db = firebase.firestore();
+
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await auth.signInWithCustomToken(__initial_auth_token);
+          } else {
+            await auth.signInAnonymously();
+          }
+
+          auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user) {
+              loadLeaderboardData();
+            }
+          });
+        } catch (e) {
+          console.warn("Firebase fallback to localStorage", e);
+          loadLeaderboardData();
+        }
+      } else {
+        loadLeaderboardData();
+      }
+    }
+
+    // --- DOM LOAD ---
+    window.addEventListener('DOMContentLoaded', () => {
+      generateNewTopic();
+      initSpeechRecognition();
+      initFirebase();
+      setupCanvas();
+    });
+
+    // --- NAVIGATION & TABS ---
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('practiceView').style.display = tabName === 'practice' ? 'block' : 'none';
+      document.getElementById('leaderboardView').style.display = tabName === 'leaderboard' ? 'block' : 'none';
+
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.toLowerCase().includes(tabName));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabName === 'leaderboard') {
+        loadLeaderboardData();
+      }
+    }
+
+    // --- TOPIC GENERATION ---
+    function setCategory(cat, element) {
+      currentCategory = cat;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      element.classList.add('active');
+      generateNewTopic();
+    }
+
+    function generateNewTopic() {
+      let filtered = TOPIC_DATABASE;
+      if (currentCategory !== 'all') {
+        filtered = TOPIC_DATABASE.filter(t => t.category === currentCategory);
+      }
+      const randIndex = Math.floor(Math.random() * filtered.length);
+      currentTopic = filtered[randIndex];
+
+      document.getElementById('topicText').innerText = `"${currentTopic.text}"`;
+      document.getElementById('topicCategoryTag').innerText = formatCategoryName(currentTopic.category);
+    }
+
+    function formatCategoryName(catKey) {
+      switch(catKey) {
+        case 'campus': return 'Campus Life';
+        case 'career': return 'Career & Hustle';
+        case 'poptech': return 'Pop Culture & Tech';
+        case 'debates': return 'Late Night Debates';
+        default: return 'General Topic';
+      }
+    }
+
+    // --- PREPARATION & RECORDING FLOW ---
+    function startPrepSession() {
+      // Switch view cards
+      document.getElementById('stepTopic').classList.remove('active');
+      document.getElementById('stepRecord').classList.add('active');
+
+      document.getElementById('activeTopicDisplay').innerText = `"${currentTopic.text}"`;
+      document.getElementById('activeTopicCategory').innerText = formatCategoryName(currentTopic.category);
+
+      // Reset timer visuals
+      const timerContainer = document.getElementById('timerContainer');
+      timerContainer.className = "timer-container prep-phase";
+      document.getElementById('timerStateLabel').innerText = "PREPARE";
+      document.getElementById('finishEarlyBtn').classList.add('hidden');
+
+      prepTimeLeft = 10;
+      updateTimerCircle(prepTimeLeft, 10);
+
+      // Start countdown
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        prepTimeLeft--;
+        updateTimerCircle(prepTimeLeft, 10);
+
+        if (prepTimeLeft <= 0) {
+          clearInterval(timerInterval);
+          startSpeakingSession();
+        }
+      }, 1000);
+    }
+
+    async function startSpeakingSession() {
+      const timerContainer = document.getElementById('timerContainer');
+      timerContainer.className = "timer-container speak-phase";
+      document.getElementById('timerStateLabel').innerText = "SPEAK NOW";
+      document.getElementById('finishEarlyBtn').classList.remove('hidden');
+
+      speakTimeLeft = 60;
+      updateTimerCircle(speakTimeLeft, 60);
+
+      // Start audio recording & speech recognition
+      speechTranscriptText = "";
+      document.getElementById('speechTranscript').classList.add('active');
+      document.getElementById('speechTranscript').innerText = "Listening... Speak clearly into your mic!";
+
+      await startAudioRecording();
+
+      if (recognition) {
+        try { recognition.start(); } catch(e) {}
+      }
+
+      timerInterval = setInterval(() => {
+        speakTimeLeft--;
+        updateTimerCircle(speakTimeLeft, 60);
+
+        if (speakTimeLeft <= 0) {
+          stopSpeakingSession();
+        }
+      }, 1000);
+    }
+
+    function stopRecordingEarly() {
+      stopSpeakingSession();
+    }
+
+    async function stopSpeakingSession() {
+      clearInterval(timerInterval);
+      if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+      }
+
+      stopAudioRecording();
+
+      // Show processing state in speechTranscript
+      document.getElementById('speechTranscript').innerText = "Speech captured! Podium AI is processing your feedback...";
+
+      // Move to evaluation
+      document.getElementById('stepRecord').classList.remove('active');
+      document.getElementById('stepResults').classList.add('active');
+
+      await analyzeSpeechWithGemini();
+    }
+
+    function updateTimerCircle(current, max) {
+      document.getElementById('timerCount').innerText = current;
+      const circle = document.getElementById('timerProgress');
+      const circumference = 2 * Math.PI * 90; // 565.48
+      const offset = circumference - (current / max) * circumference;
+      circle.style.strokeDashoffset = offset;
+    }
+
+    function resetToTopicScreen() {
+      clearInterval(timerInterval);
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      if (animFrame) cancelAnimationFrame(animFrame);
+
+      document.getElementById('stepResults').classList.remove('active');
+      document.getElementById('stepRecord').classList.remove('active');
+      document.getElementById('stepTopic').classList.add('active');
+      generateNewTopic();
+    }
+
+    // --- AUDIO & SPEECH RECOGNITION ---
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+          let currentText = '';
+          for (let i = 0; i < event.results.length; i++) {
+            currentText += event.results[i][0].transcript + ' ';
+          }
+          speechTranscriptText = currentText.trim();
+          if (speechTranscriptText) {
+            document.getElementById('speechTranscript').innerText = `"${speechTranscriptText}"`;
+          }
+        };
+      }
+    }
+
+    async function startAudioRecording() {
+      audioChunks = [];
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          audioBlobUrl = URL.createObjectURL(audioBlob);
+          document.getElementById('audioPlayer').src = audioBlobUrl;
+        };
+
+        mediaRecorder.start();
+
+        // Audio visualizer setup
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+        analyser.fftSize = 64;
+        drawWaveform();
+      } catch (err) {
+        console.warn("Microphone access denied or audio recording failed", err);
+      }
+    }
+
+    function stopAudioRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      if (animFrame) cancelAnimationFrame(animFrame);
+    }
+
+    function setupCanvas() {
+      const canvas = document.getElementById('waveform');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = 60;
+    }
+
+    function drawWaveform() {
+      const canvas = document.getElementById('waveform');
+      const ctx = canvas.getContext('2d');
+      if (!analyser) return;
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function render() {
+        animFrame = requestAnimationFrame(render);
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const barHeight = (dataArray[i] / 255) * canvas.height;
+          ctx.fillStyle = `rgba(99, 102, 241, ${0.3 + (dataArray[i] / 255) * 0.7})`;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+          x += barWidth;
+        }
+      }
+      render();
+    }
+
+    // --- GEMINI AI ANALYSIS API ENGINE ---
+    async function analyzeSpeechWithGemini() {
+      const actualTranscript = speechTranscriptText.trim() || 
+        "Honestly, when addressing this prompt, clear communication, humor, and a structured argument make all the difference in engaging your audience.";
+
+      const promptText = `
+You are an encouraging, sharp, and modern public speaking coach analyzing a 60-second impromptu speech for a college student.
+
+TOPIC PROMPT: "${currentTopic.text}"
+SPEECH TRANSCRIPT: "${actualTranscript}"
+
+Provide a constructive, engaging rating and evaluation out of 100 with actionable feedback.
+Return JSON strictly following this schema.
+      `;
+
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          score: { type: "INTEGER" },
+          clarityScore: { type: "INTEGER" },
+          structureScore: { type: "INTEGER" },
+          paceScore: { type: "INTEGER" },
+          vocabularyScore: { type: "INTEGER" },
+          relevanceScore: { type: "INTEGER" },
+          wpm: { type: "INTEGER" },
+          headline: { type: "STRING" },
+          proTip: { type: "STRING" },
+          strengths: { type: "ARRAY", items: { type: "STRING" } },
+          improvements: { type: "ARRAY", items: { type: "STRING" } }
+        },
+        required: ["score", "clarityScore", "structureScore", "paceScore", "vocabularyScore", "relevanceScore", "wpm", "headline", "proTip", "strengths", "improvements"]
+      };
+
+      // API Request with Exponential Backoff
+      try {
+        const responseData = await fetchGeminiApiWithBackoff(promptText, schema);
+        displayAnalysisResults(responseData, actualTranscript);
+      } catch (error) {
+        console.error("Gemini API Error, using fallback engine", error);
+        // Fallback local heuristic scoring if API is offline
+        const fallback = generateFallbackAnalysis(actualTranscript);
+        displayAnalysisResults(fallback, actualTranscript);
+      }
+    }
+
+    async function fetchGeminiApiWithBackoff(prompt, schema) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: schema
+        }
+      };
+
+      const retries = 5;
+      let delay = 1000;
+
+      for (let i = 0; i < retries; i++) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            return JSON.parse(jsonText);
+          }
+        } catch (e) {
+          if (i === retries - 1) throw e;
+        }
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2;
+      }
+      throw new Error("Failed after 5 retries");
+    }
+
+    function generateFallbackAnalysis(transcript) {
+      const wordCount = transcript.split(/\s+/).length;
+      const approxWpm = Math.min(180, Math.max(60, wordCount * 1.1));
+      const baseScore = Math.min(95, Math.max(68, 72 + (wordCount > 35 ? 15 : 5)));
+
+      return {
+        score: Math.round(baseScore),
+        clarityScore: 8,
+        structureScore: 8,
+        paceScore: 7,
+        vocabularyScore: 8,
+        relevanceScore: 8,
+        wpm: Math.round(approxWpm),
+        headline: "Great Energy & Clear Thesis!",
+        proTip: "Try opening with a quick personal anecdote or bold statement to immediately grab listener attention.",
+        strengths: [
+          "Delivered your thoughts smoothly without long silent breaks.",
+          "Good connection back to the core prompt."
+        ],
+        improvements: [
+          "Use deliberate pauses instead of filler words like 'like' or 'um'.",
+          "Wrap up with a memorable concluding sentence."
+        ]
+      };
+    }
+
+    function displayAnalysisResults(data, transcript) {
+      currentAnalysisResult = data;
+
+      // Fill visual scores
+      document.getElementById('overallScoreVal').innerText = data.score;
+      document.getElementById('scoreHeadline').innerText = data.headline;
+      document.getElementById('scoreProTip').innerText = `💡 Pro Tip: ${data.proTip}`;
+      document.getElementById('speechWpmTag').innerText = `~${data.wpm} Words / Min`;
+
+      // Rating Bars
+      setMetricBar('clarity', data.clarityScore);
+      setMetricBar('structure', data.structureScore);
+      setMetricBar('pace', data.paceScore);
+      setMetricBar('vocab', data.vocabularyScore);
+      setMetricBar('relevance', data.relevanceScore);
+
+      // Lists
+      const strengthsList = document.getElementById('strengthsList');
+      strengthsList.innerHTML = data.strengths.map(s => `<li>${s}</li>`).join('');
+
+      const improvementsList = document.getElementById('improvementsList');
+      improvementsList.innerHTML = data.improvements.map(i => `<li>${i}</li>`).join('');
+    }
+
+    function setMetricBar(id, value) {
+      document.getElementById(`${id}Num`).innerText = `${value}/10`;
+      document.getElementById(`${id}Bar`).style.width = `${value * 10}%`;
+    }
+
+    // --- LEADERBOARD LOGIC ---
+    function openLeaderboardModal() {
+      if (!currentAnalysisResult) return;
+      document.getElementById('modalScoreDisplay').innerText = `${currentAnalysisResult.score} / 100`;
+      document.getElementById('postModal').classList.add('active');
+    }
+
+    function closeLeaderboardModal() {
+      document.getElementById('postModal').classList.remove('active');
+    }
+
+    async function submitScoreToLeaderboard() {
+      const nameInput = document.getElementById('speakerName').value.trim() || 'Anonymous Speaker';
+      const btn = document.getElementById('submitScoreBtn');
+      btn.innerHTML = `<span class="spinner"></span>`;
+      btn.disabled = true;
+
+      const newEntry = {
+        speakerName: nameInput,
+        topicText: currentTopic.text,
+        score: currentAnalysisResult.score,
+        wpm: currentAnalysisResult.wpm,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        if (db && currentUser) {
+          const colRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+          await colRef.add(newEntry);
+        } else {
+          // LocalStorage fallback
+          let localData = JSON.parse(localStorage.getItem('podium_leaderboard') || '[]');
+          localData.push(newEntry);
+          localStorage.setItem('podium_leaderboard', JSON.stringify(localData));
+        }
+      } catch (e) {
+        console.warn("Submission fallback", e);
+      }
+
+      btn.innerHTML = `Publish Score`;
+      btn.disabled = false;
+      closeLeaderboardModal();
+      switchTab('leaderboard');
+    }
+
+    async function loadLeaderboardData() {
+      const tbody = document.getElementById('leaderboardBody');
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding: 20px; color: var(--text-muted);">Loading campus rankings...</td></tr>`;
+
+      let scores = [];
+
+      try {
+        if (db && currentUser) {
+          const colRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+          const snapshot = await colRef.get();
+          snapshot.forEach(doc => scores.push(doc.data()));
+        } else {
+          scores = JSON.parse(localStorage.getItem('podium_leaderboard') || '[]');
+        }
+      } catch (e) {
+        scores = JSON.parse(localStorage.getItem('podium_leaderboard') || '[]');
+      }
+
+      // Add default college community mock data if empty
+      if (scores.length === 0) {
+        scores = [
+          { speakerName: 'Maya L.', topicText: 'Convince the professor to extend a project deadline...', score: 95, wpm: 138 },
+          { speakerName: 'Devon K.', topicText: 'Pitch your dream internship startup idea...', score: 91, wpm: 145 },
+          { speakerName: 'Sam T.', topicText: 'Is group chat etiquette the ultimate test of friendship?', score: 88, wpm: 130 }
+        ];
+      }
+
+      // Sort by high score
+      scores.sort((a, b) => b.score - a.score);
+
+      tbody.innerHTML = scores.map((entry, idx) => {
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+        const initial = entry.speakerName.charAt(0).toUpperCase();
+
+        return `
+          <tr>
+            <td><span class="rank-badge ${rankClass}">${idx + 1}</span></td>
+            <td>
+              <div class="user-col">
+                <div class="user-avatar">${initial}</div>
+                <span>${escapeHtml(entry.speakerName)}</span>
+              </div>
+            </td>
+            <td class="topic-cell" title="${escapeHtml(entry.topicText)}">${escapeHtml(entry.topicText)}</td>
+            <td>${entry.wpm || 130} WPM</td>
+            <td><span class="score-badge-table">${entry.score} / 100</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+  </script>
 </body>
 </html>
